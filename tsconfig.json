@@ -3,8 +3,9 @@
   // for the documentation about the jsconfig.json format
   "compilerOptions": {
     // Keep allowJs here to allow use this config with tsc command line
-    "target": "es2019",
-    "lib": ["esnext", "dom"],
+    "target": "ES2019",
+    "lib": ["ESNext", "DOM"],
+    "composite": true,
     /* Additional Checks */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -13,7 +14,6 @@
     "strict": true,
     // "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
-    "suppressImplicitAnyIndexErrors": true,
     /* Module Resolution Options */
     "moduleResolution": "node",
     "module": "commonjs",
@@ -22,7 +22,7 @@
     "importHelpers": true,
     "listEmittedFiles": true,
     "outDir": "./dist",
-    "sourceMap": true
+    "sourceMap": true,
   },
   "include": ["src/index.ts", "./src/@types"],
   "exclude": ["node_modules", "@types"]

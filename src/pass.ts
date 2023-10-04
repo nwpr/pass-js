@@ -69,14 +69,16 @@ export class Pass extends PassBase {
   async asBuffer(): Promise<Buffer> {
     // Validate before attempting to create
     this.validate();
-    if (!this.template.certificate && !this.template.signRemote)
+    if (!this.template.signRemote){
+      if (!this.template.certificate)
       throw new ReferenceError(
         `Set pass certificate in template before producing pass buffers`,
       );
-    if (!this.template.signRemote && this.template.certificate && !this.template.key)
+    if (!this.template.key)
       throw new ReferenceError(
         `Set private key in pass template before producing pass buffers`,
       );
+    }
 
     // Creating new Zip file
     const zip = [] as { path: string; data: Buffer | string }[];
@@ -112,6 +114,11 @@ export class Pass extends PassBase {
       );
       zip.push({ path: 'signature', data: signature });
     } else {
+      if (!this.template.certificate || !this.template.key){
+        throw new ReferenceError(
+          `Set pass certificate and key in template before producing pass buffers`,
+        );
+      }
       const signManifest = await import ('./lib/signManifest-forge');
       const signature = signManifest.signManifest(
         this.template.certificate,

@@ -5,6 +5,8 @@ import { execFileSync } from 'child_process';
 import { randomBytes } from 'crypto';
 import { unlinkSync, mkdtempSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
+import { toEndWith, toIncludeSameMembers } from 'jest-extended';
+expect.extend({ toEndWith, toIncludeSameMembers });
 
 import * as Localization from '../src/lib/localizations';
 

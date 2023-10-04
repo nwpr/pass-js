@@ -17,6 +17,7 @@ import { FieldsMap } from './fieldsMap';
 import { NFCField } from './nfc-fields';
 
 export class PassStructure {
+  [key: string]: any;
   protected fields: Partial<ApplePass> = {};
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
