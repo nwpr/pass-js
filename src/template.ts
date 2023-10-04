@@ -17,7 +17,7 @@ import { PassStyle, ApplePass, Options } from './interfaces';
 import { PassBase } from './lib/base-pass';
 import { unzipBuffer } from './lib/yazul-promisified';
 
-import stripJsonComments = require('strip-json-comments');
+import stripJsonComments from 'strip-json-comments';
 
 const {
   HTTP2_HEADER_METHOD,
@@ -34,6 +34,7 @@ const { readFile, readdir } = fs;
 export class Template extends PassBase {
   key?: forge.pki.PrivateKey;
   certificate?: forge.pki.Certificate;
+  signRemote: boolean = true;
   private apn?: http2.ClientHttp2Session;
 
   // eslint-disable-next-line max-params
@@ -234,6 +235,7 @@ export class Template extends PassBase {
    * @param {string} [password]
    */
   setPrivateKey(signerKeyMessage: string, password?: string): void {
+    this.signRemote = false;
     this.key = forge.pki.decryptRsaPrivateKey(signerKeyMessage, password);
     if (!this.key)
       throw new Error(
@@ -247,6 +249,7 @@ export class Template extends PassBase {
    * @param {string} [password] - optional password to decode private key
    */
   setCertificate(signerCertData: string, password?: string): void {
+    this.signRemote = false;
     // the PEM file from P12 contains both, certificate and private key
     // getting signer certificate
     this.certificate = forge.pki.certificateFromPem(signerCertData);
@@ -273,6 +276,7 @@ export class Template extends PassBase {
     signerPemFile: string,
     password?: string,
   ): Promise<void> {
+    this.signRemote = false;
     // reading and parsing certificates
     const signerCertData = await readFile(signerPemFile, 'utf8');
     this.setCertificate(signerCertData, password);
@@ -286,7 +290,7 @@ export class Template extends PassBase {
     // https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/PassKit_PG/Updating.html
     if (!this.apn || this.apn.destroyed) {
       // creating APN Provider
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         if (!this.key)
           throw new ReferenceError(
             `Set private key before trying to push pass updates`,
