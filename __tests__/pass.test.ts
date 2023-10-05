@@ -161,7 +161,7 @@ describe('Pass', () => {
       path.resolve(__dirname, './resources/passes/Event.pass'),
     );
     expect(JSON.parse(JSON.stringify(t))).toEqual(
-      readFileSync('./resources/passes/Event.pass/pass.json'),
+      JSON.parse(readFileSync(path.resolve(__dirname, './resources/passes/Event.pass/pass.json'), 'utf8')),
     );
   });
 
