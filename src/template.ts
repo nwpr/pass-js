@@ -188,7 +188,9 @@ export class Template extends PassBase {
               entry.crc32
             }, got ${crc32(buf)}`,
           );
-        const passJSON: Partial<ApplePass> = JSON.parse(stripJsonComments(buf.toString('utf8')));
+        const passJSON: Partial<ApplePass> = JSON.parse(
+          stripJsonComments(buf.toString('utf8')),
+        );
         template = new Template(
           undefined,
           passJSON,
@@ -265,6 +267,15 @@ export class Template extends PassBase {
     );
     if (signerKeyMessage)
       this.setPrivateKey(forge.pem.encode(signerKeyMessage), password);
+  }
+
+  /**
+   * Sets the signing process to be external
+   */
+  setRemoteSigning(): void {
+    this.signRemote = true;
+    this.key = undefined;
+    this.certificate = undefined;
   }
 
   /**

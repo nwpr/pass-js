@@ -1,11 +1,12 @@
-[![npm (scoped)](https://img.shields.io/npm/v/@walletpass/pass-js.svg)](https://www.npmjs.com/package/@walletpass/pass-js) [![codecov](https://codecov.io/gh/walletpass/pass-js/branch/master/graph/badge.svg)](https://codecov.io/gh/walletpass/pass-js)
-[![Known Vulnerabilities](https://snyk.io/test/github/walletpass/pass-js/badge.svg?targetFile=package.json)](https://snyk.io/test/github/walletpass/pass-js?targetFile=package.json) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=walletpass_pass-js&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=walletpass_pass-js) [![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest) [![install size](https://packagephobia.now.sh/badge?p=@walletpass/pass-js)](https://packagephobia.now.sh/result?p=@walletpass/pass-js)
+[![npm (scoped)](https://img.shields.io/npm/v/@nwpr/pass-js.svg)](https://www.npmjs.com/package/@nwpr/pass-js) [![codecov](https://codecov.io/gh/nwpr/pass-js/branch/master/graph/badge.svg)](https://codecov.io/gh/nwpr/pass-js)
+[![Known Vulnerabilities](https://snyk.io/test/github/nwpr/pass-js/badge.svg?targetFile=package.json)](https://snyk.io/test/github/nwpr/pass-js?targetFile=package.json) [![tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest) [![install size](https://packagephobia.now.sh/badge?p=@nwpr/pass-js)](https://packagephobia.now.sh/result?p=@nwpr/pass-js)
 
 <img src="https://docs-assets.developer.apple.com/published/c104c9bff0/841b02dd-b78c-4cad-8da4-700761d34e14.png" alt="Apple Wallet logo" width="216" height="216" align="left">
 
-# @walletpass/pass-js
+# @nwpr/pass-js
 
 <p align="center">A Node.js library for generating Apple Wallet passes with localizations, NFC and web service push updates support. Written in Typescript.</p>
+<p align="center">Fork of [@walletpass/pass-js](https://github.com/walletpass/pass-js)</p>
 
 <br><br><br>
 
@@ -14,9 +15,9 @@
 Install with `NPM` or `yarn`:
 
 ```sh
-npm install @walletpass/pass-js --save
+npm install @nwpr/pass-js --save
 
-yarn add @walletpass/pass-js
+yarn add @nwpr/pass-js
 ```
 
 # Get your certificates
@@ -48,8 +49,8 @@ Authority](https://www.apple.com/certificateauthority/) certificate is not neede
 Start with a template. A template has all the common data fields that will be
 shared between your passes.
 
-```js
-const { Template } = require('@walletpass/pass-js');
+```ts
+import { Template } from '@nwpr/pass-js';
 
 // Create a Template from local folder, see __test__/resources/passes for examples
 // .load will load all fields from pass.json,
@@ -88,7 +89,7 @@ second optional argument has any fields you want to set on the template.
 
 You can access template fields directly, or from chained accessor methods, e.g:
 
-```js
+```ts
 template.passTypeIdentifier = 'pass.com.example.passbook';
 template.teamIdentifier = 'MXL';
 ```
@@ -104,7 +105,7 @@ You can set any available fields either on a template or pass instance, such as:
 
 In addition, you need to tell the template where to find the key file:
 
-```js
+```ts
 await template.loadCertificate(
   '/etc/passbook/certificate_and_key.pem',
   'secret',
@@ -114,9 +115,24 @@ template.setCertificate(pemEncodedPassCertificate);
 template.setPrivateKey(pemEncodedPrivateKey, optionalKeyPassword);
 ```
 
+Alternatively you can also use an external REST service for signing the template.
+The library will then use environment variables for the remote endpoint:
+
+```ts
+template.setRemoteSigning();
+```
+
+```env
+SIGN_URL="https://localhost:3000/api/sign-manifest"
+SIGN_HEADERS="X-API-KEY=ABCD123; X-OTHER-HEADER=XYZ"
+```
+
+The library will make a POST to the specified URL with the manifest.json in the body.
+Your endpoint must return the detached signature in DER format as binary response.
+
 If you have images that are common to all passes, you may want to specify them once in the template:
 
-```js
+```ts
 // specify a single image with specific density and localization
 await pass.images.add('icon', iconFilename, '2x', 'ru');
 // load all appropriate images in all densities and localizations
@@ -128,7 +144,7 @@ You can add the image itself or a `Buffer`. Image format is enforced to be **PNG
 Alternatively, if you have one directory containing the template file `pass.json`, the key
 `com.example.passbook.pem` and all the needed images, you can just use this single command:
 
-```js
+```ts
 const template = await Template.load(
   './path/to/templateFolder',
   'secretKeyPasswod',
@@ -137,7 +153,7 @@ const template = await Template.load(
 
 You can use the options parameter of the template factory functions to set the `allowHttp` property. This enables you to use a `webServiceUrl` in your `pass.json` that uses the HTTP protocol instead of HTTPS for development purposes:
 
-```js
+```ts
 const template = await Template.load(
   './path/to/templateFolder',
   'secretKeyPasswod',
@@ -151,7 +167,7 @@ const template = await Template.load(
 
 To create a new pass from a template:
 
-```js
+```ts
 const pass = template.createPass({
   serialNumber: '123456',
   description: '20% off',
@@ -160,7 +176,7 @@ const pass = template.createPass({
 
 Just like the template, you can access pass fields directly, e.g:
 
-```js
+```ts
 pass.serialNumber = '12345';
 pass.description = '20% off';
 ```
@@ -172,13 +188,13 @@ sigh.
 To make it easier, you can use methods of standard Map object or `add` that
 will do the logical thing. For example, to add a primary field:
 
-```js
+```ts
 pass.primaryFields.add({ key: 'time', label: 'Time', value: '10:00AM' });
 ```
 
 To get one or all fields:
 
-```js
+```ts
 const dateField = pass.primaryFields.get('date');
 for (const [key, { value }] of pass.primaryFields.entries()) {
   // ...
@@ -187,7 +203,7 @@ for (const [key, { value }] of pass.primaryFields.entries()) {
 
 To remove one or all fields:
 
-```js
+```ts
 pass.primaryFields.delete('date');
 pass.primaryFields.clear();
 ```
@@ -199,8 +215,8 @@ Adding images to a pass is the same as adding images to a template (see above).
 If you have [dates in your fields](https://developer.apple.com/library/archive/documentation/UserExperience/Reference/PassKit_Bundle/Chapters/FieldDictionary.html#//apple_ref/doc/uid/TP40012026-CH4-SW6) make sure they are in ISO 8601 format with timezone or a `Date` instance.
 For example:
 
-```js
-const { constants } = require('@walletpass/pass-js');
+```ts
+import { constants } from '@nwpr/pass-js';
 
 pass.primaryFields.add({
   key: 'updated',
@@ -230,7 +246,7 @@ template.expirationDate = new Date(2020, 10, 10, 10, 10);
 
 This library fully supports both [string localization](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/PassKit_PG/Creating.html#//apple_ref/doc/uid/TP40012195-CH4-SW54) and/or [images localization](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/PassKit_PG/Creating.html#//apple_ref/doc/uid/TP40012195-CH4-SW1):
 
-```js
+```ts
 // everything from template
 // will load all localized images and strings from folders like ru.lproj/ or fr-CA.lproj/
 await template.load(folderPath);
@@ -271,14 +287,14 @@ Localization applies for all fields' `label` and `value`. There is a note about 
 
 To generate a file:
 
-```js
+```ts
 const buf = await pass.asBuffer();
 await fs.writeFile('pathToPass.pkpass', buf);
 ```
 
 You can send the buffer directly to an HTTP server response:
 
-```js
+```ts
 app.use(async (ctx, next) => {
   ctx.status = 200;
   ctx.type = passkit.constants.PASS_MIME_TYPE;
@@ -292,13 +308,9 @@ If the pass file generates without errors but you aren't able to open your pass 
 
 ## Stay in touch
 
-- Author - [Konstantin Vyatkin](https://github.com/tinovyatkin)
-- Email - tino [at] vtkn.io
+- Maintainer - [Nikolaus Walther](https://github.com/nwpr)
+- Email - pass-js [at] mail.walther.eu.org
 
 ## License
 
-`@walletpass/pass-js` is [MIT licensed](LICENSE).
-
-# Financial Contributors
-
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/walletpass/contribute)]
+`@nwpr/pass-js` is [MIT licensed](LICENSE), and a fork of `@walletpass/pass-js`.
