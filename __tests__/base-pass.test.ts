@@ -1,6 +1,6 @@
-import { PassBase } from '../src/lib/base-pass';
-import { TOP_LEVEL_FIELDS } from '../src/constants';
 import { toIncludeSameMembers } from 'jest-extended';
+import { TOP_LEVEL_FIELDS } from '../src/constants';
+import { PassBase } from '../src/lib/base-pass';
 
 expect.extend({
   toIncludeSameMembers,
@@ -9,12 +9,12 @@ expect.extend({
 describe('PassBase', () => {
   it('should have all required pass properties', () => {
     // to be able to check NFC property it must be storeCard
-    const bp = new PassBase({ storeCard: {} });
+    const bp: PassBase = new PassBase({ storeCard: {} });
     for (const field in TOP_LEVEL_FIELDS) expect(bp).toHaveProperty(field);
   });
 
   it('works with locations', () => {
-    const bp = new PassBase();
+    const bp: PassBase = new PassBase();
     expect(bp.locations).toBeUndefined();
     bp.addLocation([1, 2]);
     bp.addLocation({ lat: 3, lng: 4 }, 'The point');
@@ -25,7 +25,7 @@ describe('PassBase', () => {
   });
 
   it('works with locations as setter', () => {
-    const bp = new PassBase();
+    const bp: PassBase = new PassBase();
     expect(bp.locations).toBeUndefined();
     bp.locations = [
       { longitude: 123, latitude: 321, relevantText: 'Test text' },
@@ -36,7 +36,7 @@ describe('PassBase', () => {
   });
 
   it('works with beacons', () => {
-    const bp = new PassBase();
+    const bp: PassBase = new PassBase();
     bp.beacons = [{ proximityUUID: '1143243' }];
     expect(bp.beacons).toHaveLength(1);
     expect(() => {
@@ -49,7 +49,9 @@ describe('PassBase', () => {
     expect(() => {
       bp.webServiceURL = 'https://transfers.do/webservice';
     }).not.toThrow();
-    expect(JSON.stringify(bp)).toMatchInlineSnapshot(`"{"formatVersion":1,"webServiceURL":"https://transfers.do/webservice"}"`);
+    expect(JSON.stringify(bp)).toMatchInlineSnapshot(
+      `"{"formatVersion":1,"webServiceURL":"https://transfers.do/webservice"}"`,
+    );
     // should throw on bad url
     expect(() => {
       bp.webServiceURL = '/webservice';

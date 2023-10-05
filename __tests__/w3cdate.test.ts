@@ -1,7 +1,7 @@
 import {
+  getDateFromW3CString,
   getW3CDateString,
   isValidW3CDateString,
-  getDateFromW3CString,
 } from '../src/lib/w3cdate';
 
 describe('W3C dates strings ', () => {

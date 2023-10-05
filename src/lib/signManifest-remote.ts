@@ -10,20 +10,19 @@ HEADERS['Content-Type'] = 'application/json';
  * @param {string} manifest - manifest to sign
  * @returns {Buffer} - signature for given manifest
  */
-export async function signManifest(
-  manifest: string
-): Promise<Buffer> {
+export async function signManifest(manifest: string): Promise<Buffer> {
   return await fetch(URL, {
     method: 'POST',
     headers: HEADERS,
     body: manifest,
-  }).then((res) => {
-    if (res.status !== 200) {
-      throw new Error(`Failed to sign manifest: ${res.statusText}`);
-    }
-    return res.buffer();
-  }
-    ).catch((err) => {
-        throw new Error(`Failed to sign manifest: ${err}`);
+  })
+    .then(async (res) => {
+      if (res.status !== 200) {
+        throw new Error(`Failed to sign manifest: ${res.statusText}`);
+      }
+      return res.buffer();
+    })
+    .catch(err => {
+      throw new Error(`Failed to sign manifest: ${err}`);
     });
 }

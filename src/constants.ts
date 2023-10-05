@@ -5,17 +5,17 @@
  */
 
 import {
-  PassStyle,
-  TransitType,
-  TextAlignment,
-  NumberStyle,
-  BarcodeFormat,
-  DataStyleFormat,
-  DataDetectors,
-  PassCommonStructure,
   ApplePass,
+  BarcodeFormat,
+  DataDetectors,
+  DataStyleFormat,
+  NumberStyle,
+  PassCommonStructure,
+  PassStyle,
+  TextAlignment,
+  TransitType,
 } from './interfaces.js';
-import { ImageType, ImageDensity } from './lib/images.js';
+import { ImageDensity, ImageType } from './lib/images.js';
 
 export const PASS_MIME_TYPE = 'application/vnd.apple.pkpass';
 

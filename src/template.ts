@@ -2,18 +2,18 @@
  * Passbook are created from templates
  */
 
+import { promises as fs } from 'fs';
 import * as http2 from 'http2';
 import { join } from 'path';
-import { promises as fs } from 'fs';
 
-import * as forge from 'node-forge';
 import { unsigned as crc32 } from 'buffer-crc32';
+import * as forge from 'node-forge';
 
-import { Pass } from './pass.js';
 import { PASS_STYLES } from './constants.js';
-import { PassStyle, ApplePass, Options } from './interfaces.js';
+import { ApplePass, Options, PassStyle } from './interfaces.js';
 import { PassBase } from './lib/base-pass.js';
 import { unzipBuffer } from './lib/yazul-promisified.js';
+import { Pass } from './pass.js';
 
 import { default as stripJsonComments } from 'strip-json-comments';
 
@@ -41,7 +41,7 @@ export class Template extends PassBase {
     fields: Partial<ApplePass> = {},
     images?: import('./lib/images.js').PassImages,
     localization?: import('./lib/localizations.js').Localizations,
-    options?: Options
+    options?: Options,
   ) {
     super(fields, images, localization, options);
 
@@ -53,21 +53,20 @@ export class Template extends PassBase {
   }
 
   /**
- * Loads Template, images and key from a given path
- *
- * @static
- * @param {string} folderPath
- * @param {string} [keyPassword] - optional key password
- * @param {Options} options - settings for the lib
- * @returns {Promise.<Template>}
- * @throws - if given folder doesn't contain pass.json or it is in invalid format
- * @memberof Template
- */
-  // eslint-disable-next-line max-statements, sonarjs/cognitive-complexity
+   * Loads Template, images and key from a given path
+   *
+   * @static
+   * @param {string} folderPath
+   * @param {string} [keyPassword] - optional key password
+   * @param {Options} options - settings for the lib
+   * @returns {Promise.<Template>}
+   * @throws - if given folder doesn't contain pass.json or it is in invalid format
+   * @memberof Template
+   */
   static async load(
     folderPath: string,
     keyPassword?: string,
-    options?: Options
+    options?: Options,
   ): Promise<Template> {
     // Check if the path is accessible directory actually
     const entries = await readdir(folderPath, { withFileTypes: true });
@@ -78,9 +77,9 @@ export class Template extends PassBase {
     if (entries.find(entry => entry.isFile() && entry.name === 'pass.json')) {
       // loading main JSON file
       const jsonContent = await readFile(join(folderPath, 'pass.json'), 'utf8');
-      const passJson = JSON.parse(stripJsonComments(jsonContent)) as Partial<
-        ApplePass
-      >;
+      const passJson = JSON.parse(
+        stripJsonComments(jsonContent),
+      ) as Partial<ApplePass>;
 
       // Trying to detect the type of pass
       let type: PassStyle | undefined;
@@ -159,12 +158,15 @@ export class Template extends PassBase {
   }
 
   /**
- * Load template from a given buffer with ZIPped pass/template content
- *
- * @param {Buffer} buffer
- * @param {Options} options
- */
-  static async fromBuffer(buffer: Buffer, options?: Options): Promise<Template> {
+   * Load template from a given buffer with ZIPped pass/template content
+   *
+   * @param {Buffer} buffer
+   * @param {Options} options
+   */
+  static async fromBuffer(
+    buffer: Buffer,
+    options?: Options,
+  ): Promise<Template> {
     const zip = await unzipBuffer(buffer);
     if (zip.entryCount < 1)
       throw new TypeError(`Provided ZIP buffer contains no entries`);
@@ -186,13 +188,13 @@ export class Template extends PassBase {
               entry.crc32
             }, got ${crc32(buf)}`,
           );
-        const passJSON = JSON.parse(stripJsonComments(buf.toString('utf8')));
+        const passJSON: Partial<ApplePass> = JSON.parse(stripJsonComments(buf.toString('utf8')));
         template = new Template(
           undefined,
           passJSON,
           template.images,
           template.localization,
-          options
+          options,
         );
       } else {
         // test if it's an image
@@ -359,11 +361,11 @@ export class Template extends PassBase {
       { ...this.fields, ...fields },
       this.images,
       this.localization,
-      this.options
+      this.options,
     );
   }
 }
 
-function createDefaultTemplate(options?: Options): Template{
-  return new Template(undefined, {}, undefined, undefined, options)
+function createDefaultTemplate(options?: Options): Template {
+  return new Template(undefined, {}, undefined, undefined, options);
 }

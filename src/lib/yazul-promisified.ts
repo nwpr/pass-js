@@ -1,7 +1,8 @@
 import { promisify } from 'util';
 
-import { Entry, Options, ZipFile, fromBuffer as ZipFromBuffer } from 'yauzl';
 import { EventIterator } from 'event-iterator';
+import { Entry, Options, ZipFile, fromBuffer as ZipFromBuffer } from 'yauzl';
+import { Readable } from 'stream';
 
 import { streamToBuffer } from './stream-to-buffer.js';
 
@@ -31,12 +32,12 @@ Object.defineProperties(ZipFile.prototype, {
     writable: false,
     configurable: false,
     async value(entry: Entry) {
-      const stream = await this.openReadStreamAsync(entry);
+      const stream: Readable = await this.openReadStreamAsync(entry);
       return streamToBuffer(stream);
     },
   },
 });
-export const unzipBuffer = (promisify(ZipFromBuffer) as unknown) as (
+export const unzipBuffer = promisify(ZipFromBuffer) as unknown as (
   buffer: Buffer,
   options?: Options,
 ) => Promise<

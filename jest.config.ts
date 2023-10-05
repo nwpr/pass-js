@@ -10,11 +10,9 @@ const config: JestConfigWithTsJest = {
   setupFilesAfterEnv: ['jest-extended'],
   resolver: '@repobuddy/jest/resolver',
   moduleNameMapper: {
-    "(.+)\\.js": "$1"
+    '(.+)\\.js': '$1',
   },
-  transformIgnorePatterns: [
-    "<rootDir>/node_modules"
-  ],
+  transformIgnorePatterns: ['<rootDir>/node_modules'],
   watchPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/.sonarlint/',
@@ -27,18 +25,8 @@ const config: JestConfigWithTsJest = {
       useESM: true,
       diagnostics: {
         ignoreCodes: [
-          2571,
-          2532,
-          2488,
-          2322,
-          2339,
-          2345,
-          6031,
-          6133,
-          7006,
-          7053,
-          18003,
-          18048
+          2571, 2532, 2488, 2322, 2339, 2345, 6031, 6133, 7006, 7053, 18003,
+          18048,
         ],
       },
     },

@@ -5,22 +5,21 @@
  * @see {@link https://developer.apple.com/library/content/documentation/UserExperience/Reference/PassKit_Bundle/Chapters/LowerLevel.html#//apple_ref/doc/uid/TP40012026-CH3-SW3}
  */
 
+import { PASS_STYLES, STRUCTURE_FIELDS, TRANSIT } from '../constants.js';
 import {
   ApplePass,
+  PassCommonStructure,
   PassStyle,
   TransitType,
-  PassCommonStructure,
 } from '../interfaces.js';
-import { PASS_STYLES, TRANSIT, STRUCTURE_FIELDS } from '../constants.js';
 
 import { FieldsMap } from './fieldsMap.js';
 import { NFCField } from './nfc-fields.js';
 
 export class PassStructure {
-  [key: string]: any;
+  [key: string]: unknown;
   protected fields: Partial<ApplePass> = {};
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   constructor(fields: Partial<ApplePass> = {}) {
     // setting style first
     for (const style of PASS_STYLES) {
@@ -58,18 +57,7 @@ export class PassStructure {
     return undefined;
   }
 
-  set style(v: PassStyle | undefined) {
-    // remove all other styles
-    for (const style of PASS_STYLES) if (style !== v) delete this.fields[style];
-    if (!v) return;
-    if (!PASS_STYLES.has(v)) throw new TypeError(`Invalid Pass type "${v}"`);
-    if (!(v in this.fields)) this.fields[v] = {};
-    // Add NFC fields
-    if ('storeCard' in this.fields) this.fields.nfc = new NFCField();
-    //   if ('boardingPass' in this.fields && this.fields.boardingPass) this.fields.boardingPass.
-  }
-
-  /**
+    /**
    * Required for boarding passes; otherwise not allowed.
    * Type of transit.
    * Must be one of the following values: PKTransitTypeAir, PKTransitTypeBoat, PKTransitTypeBus, PKTransitTypeGeneric,PKTransitTypeTrain.
@@ -82,6 +70,17 @@ export class PassStructure {
     if ('boardingPass' in this.fields && this.fields.boardingPass)
       return this.fields.boardingPass.transitType;
     return undefined;
+  }
+
+  set style(v: PassStyle | undefined) {
+    // remove all other styles
+    for (const style of PASS_STYLES) if (style !== v) delete this.fields[style];
+    if (!v) return;
+    if (!PASS_STYLES.has(v)) throw new TypeError(`Invalid Pass type "${v}"`);
+    if (!(v in this.fields)) this.fields[v] = {};
+    // Add NFC fields
+    if ('storeCard' in this.fields) this.fields.nfc = new NFCField();
+    //   if ('boardingPass' in this.fields && this.fields.boardingPass) this.fields.boardingPass.
   }
 
   set transitType(v: TransitType | undefined) {

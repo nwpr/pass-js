@@ -9,9 +9,10 @@ export function getGeoPoint(
   point:
     | readonly number[]
     | { lat: number; lng: number; alt?: number }
-    | { longitude: number; latitude: number } & (
+    | ({ longitude: number; latitude: number } & (
         | { altitude?: number }
-        | { elevation?: number }),
+        | { elevation?: number }
+      )),
 ): { longitude: number; latitude: number; altitude?: number } {
   if (!point) throw new Error("Can't get coordinates from undefined");
 

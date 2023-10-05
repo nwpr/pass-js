@@ -1,4 +1,4 @@
-import { Field, FieldDescriptor, DataStyleFormat } from '../interfaces.js';
+import { DataStyleFormat, Field, FieldDescriptor } from '../interfaces.js';
 
 import { getW3CDateString } from './w3cdate.js';
 
@@ -8,14 +8,11 @@ export class FieldsMap extends Map<string, FieldDescriptor> {
    */
   toJSON(): Field[] | undefined {
     if (!this.size) return undefined;
-    return [...this].map(
-      ([key, data]): Field => {
-        // Remap Date objects to string
-        if (data.value instanceof Date)
-          data.value = getW3CDateString(data.value);
-        return { key, ...data };
-      },
-    );
+    return [...this].map(([key, data]): Field => {
+      // Remap Date objects to string
+      if (data.value instanceof Date) data.value = getW3CDateString(data.value);
+      return { key, ...data };
+    });
   }
 
   /**
@@ -38,11 +35,11 @@ export class FieldsMap extends Map<string, FieldDescriptor> {
         )}`,
       );
     if ('dateStyle' in data) {
-      const date =
+      const date: Date =
         data.value instanceof Date ? data.value : new Date(data.value);
       if (!Number.isFinite(date.getTime()))
         throw new TypeError(
-          `When dateStyle specified the value must be a valid Date instance or string, received ${data.value}`,
+          `When dateStyle specified the value must be a valid Date instance or string, received ${data.value.toString()}`,
         );
       this.set(key, { ...data, value: date });
     } else this.set(key, data);

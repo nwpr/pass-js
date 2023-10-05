@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import { PassImages, IMAGE_FILENAME_REGEX } from '../src/lib/images';
+import { IMAGE_FILENAME_REGEX, PassImages } from '../src/lib/images';
 
 describe('PassImages', () => {
   it('IMAGE_FILENAME_REGEX', () => {

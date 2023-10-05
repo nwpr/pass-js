@@ -1,13 +1,11 @@
 // Generate a pass file.
 
-'use strict';
-
 import { toBuffer as createZip } from 'do-not-zip';
 
+import { ApplePass, Options } from './interfaces.js';
+import { PassBase } from './lib/base-pass.js';
 import { getBufferHash } from './lib/getBufferHash.js';
 import { PassImages } from './lib/images.js';
-import { PassBase } from './lib/base-pass.js';
-import { ApplePass, Options } from './interfaces.js';
 
 // Create a new pass.
 //
@@ -21,7 +19,7 @@ export class Pass extends PassBase {
     fields: Partial<ApplePass> = {},
     images?: PassImages,
     localization?: import('./lib/localizations.js').Localizations,
-    options?: Options
+    options?: Options,
   ) {
     super(fields, images, localization, options);
     this.template = template;
@@ -69,19 +67,19 @@ export class Pass extends PassBase {
   async asBuffer(): Promise<Buffer> {
     // Validate before attempting to create
     this.validate();
-    if (!this.template.signRemote){
+    if (!this.template.signRemote) {
       if (!this.template.certificate)
-      throw new ReferenceError(
-        `Set pass certificate in template before producing pass buffers`,
-      );
-    if (!this.template.key)
-      throw new ReferenceError(
-        `Set private key in pass template before producing pass buffers`,
-      );
+        throw new ReferenceError(
+          `Set pass certificate in template before producing pass buffers`,
+        );
+      if (!this.template.key)
+        throw new ReferenceError(
+          `Set private key in pass template before producing pass buffers`,
+        );
     }
 
     // Creating new Zip file
-    const zip = [] as { path: string; data: Buffer | string }[];
+    const zip: { path: string; data: Buffer | string }[] = [];
 
     // Adding required files
     // Create pass.json
@@ -108,27 +106,26 @@ export class Pass extends PassBase {
 
     // Create signature
     if (this.template.signRemote) {
-      const signManifest = await import ('./lib/signManifest-remote.js');
-      const signature = await signManifest.signManifest(
-        manifestJson
-      );
+      const signManifest = await import('./lib/signManifest-remote.js');
+      const signature = await signManifest.signManifest(manifestJson);
       zip.push({ path: 'signature', data: signature });
     } else {
-      if (!this.template.certificate || !this.template.key){
+      if (!this.template.certificate || !this.template.key) {
         throw new ReferenceError(
           `Set pass certificate and key in template before producing pass buffers`,
         );
       }
-      const signManifest = await import ('./lib/signManifest-forge.js');
+      const signManifest = await import('./lib/signManifest-forge.js');
       const signature = signManifest.signManifest(
         this.template.certificate,
         this.template.key,
-        manifestJson
-        );
+        manifestJson,
+      );
       zip.push({ path: 'signature', data: signature });
     }
 
     // finished!
-    return createZip(zip);
+    const zipfile: Promise<Buffer> = createZip(zip);
+    return zipfile;
   }
 }

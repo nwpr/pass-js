@@ -4,8 +4,8 @@
  * @see {@link https://developer.apple.com/library/archive/documentation/UserExperience/Reference/PassKit_Bundle/Chapters/FieldDictionary.html}
  */
 
-import { PassColor } from './lib/pass-color.js';
 import { FieldsMap } from './lib/fieldsMap.js';
+import { PassColor } from './lib/pass-color.js';
 
 export type DataDetectors =
   | 'PKDataDetectorTypePhoneNumber'
@@ -56,7 +56,8 @@ export type FieldDescriptor = {
       // Number Style Keys
       currencyCode?: string;
       numberStyle?: NumberStyle;
-    });
+    }
+);
 
 export type Field = {
   // Standard Field Dictionary Keys
@@ -94,6 +95,10 @@ export interface BarcodeDescriptor {
   altText?: string;
 }
 
+export interface IndexSignature {
+  [key: string]: unknown;
+}
+
 /**
  * Top-Level Keys
  * The top level of the pass.json file is a dictionary.
@@ -107,7 +112,7 @@ export interface BarcodeDescriptor {
 /**
  * Information that is required for all passes.
  */
-export interface PassStandardKeys {
+export interface PassStandardKeys extends IndexSignature {
   /**
    * Brief description of the pass, used by the iOS accessibility technologies.
    * Don’t try to include all of the data on the pass in its description,
@@ -145,7 +150,7 @@ export interface PassStandardKeys {
 /**
  * Information about an app that is associated with a pass.
  */
-export interface PassAssociatedAppKeys {
+export interface PassAssociatedAppKeys extends IndexSignature {
   /**
    * A URL to be passed to the associated app when launching it.
    * The app receives this URL in the application:didFinishLaunchingWithOptions:
@@ -166,7 +171,7 @@ export interface PassAssociatedAppKeys {
 /**
  * Custom information about a pass provided for a companion app to use.
  */
-export interface PassCompanionAppKeys {
+export interface PassCompanionAppKeys extends IndexSignature {
   /**
    * Custom information for companion apps. This data is not displayed to the user.
    * For example, a pass for a cafe could include information about
@@ -181,7 +186,7 @@ export interface PassCompanionAppKeys {
  * A pass is marked as expired if the current date is after the pass’s expiration date,
  * or if the pass has been explicitly marked as voided.
  */
-export interface PassExpirationKeys {
+export interface PassExpirationKeys extends IndexSignature {
   /**
    * Date and time when the pass expires.
    * The value must be a complete date with hours and minutes,
@@ -198,7 +203,7 @@ export interface PassExpirationKeys {
 /**
  * Information about a location beacon.
  */
-export interface Beacon {
+export interface Beacon extends IndexSignature {
   /**
    * Unique identifier of a Bluetooth Low Energy location beacon.
    */
@@ -223,7 +228,7 @@ export interface Beacon {
 /**
  * Location Dictionary Keys
  */
-export interface Location {
+export interface Location extends IndexSignature {
   /**
    * Latitude, in degrees, of the location.
    */
@@ -248,7 +253,7 @@ export interface Location {
 /**
  * Information about where and when a pass is relevant.
  */
-export interface PassRelevanceKeys {
+export interface PassRelevanceKeys extends IndexSignature {
   /**
    * Beacons marking locations where the pass is relevant.
    */
@@ -277,7 +282,7 @@ export interface PassRelevanceKeys {
  *
  * @see {@link https://developer.apple.com/library/content/documentation/UserExperience/Reference/PassKit_Bundle/Chapters/LowerLevel.html#//apple_ref/doc/uid/TP40012026-CH3-SW3}
  */
-export interface PassCommonStructure {
+export interface PassCommonStructure extends IndexSignature {
   /**
    *  Fields to be displayed in the header on the front of the pass.
    * Use header fields sparingly; unlike all other fields,
@@ -305,7 +310,7 @@ export interface PassCommonStructure {
 /**
  * Keys that define the visual style and appearance of the pass.
  */
-export interface PassVisualAppearanceKeys {
+export interface PassVisualAppearanceKeys extends IndexSignature {
   /**
    * Information specific to the pass’s barcode.
    * For this dictionary’s keys, see Barcode Dictionary Keys.
@@ -364,7 +369,7 @@ export interface PassVisualAppearanceKeys {
   suppressStripShine?: boolean;
 }
 
-export interface PassWebServiceKeys {
+export interface PassWebServiceKeys extends IndexSignature {
   /**
    * The URL of a web service that conforms to the API described in PassKit Web Service Reference.
    * The web service must use the HTTPS protocol in production; the leading https:// is included in the value of this key.
@@ -381,7 +386,7 @@ export interface PassWebServiceKeys {
   authenticationToken?: string;
 }
 
-export interface NFCDictionary {
+export interface NFCDictionary extends IndexSignature {
   /**
    * The payload to be transmitted to the Apple Pay terminal.
    * Must be 64 bytes or less.
@@ -406,7 +411,7 @@ export type TransitType =
   | 'PKTransitTypeTrain'
   | 'PKTransitTypeGeneric';
 
-export interface BoardingPass {
+export interface BoardingPass extends IndexSignature {
   boardingPass: {
     /**
      * Type of transit.
@@ -415,19 +420,19 @@ export interface BoardingPass {
   } & PassCommonStructure;
 }
 
-export interface CouponPass {
+export interface CouponPass extends IndexSignature {
   coupon: PassCommonStructure;
 }
 
-export interface EventTicketPass {
+export interface EventTicketPass extends IndexSignature {
   eventTicket: PassCommonStructure;
 }
 
-export interface GenericPass {
+export interface GenericPass extends IndexSignature {
   generic: PassCommonStructure;
 }
 
-export interface StoreCardPass {
+export interface StoreCardPass extends IndexSignature {
   storeCard: PassCommonStructure;
   nfc?: NFCDictionary;
 }
@@ -448,6 +453,6 @@ export type ApplePass = PassStandardKeys &
   PassWebServiceKeys &
   PassStructureFields;
 
-  export interface Options {
-    allowHttp: boolean
-  }
+export interface Options extends IndexSignature {
+  allowHttp: boolean;
+}

@@ -1,11 +1,11 @@
 /* eslint-disable no-shadow */
-import * as path from 'path';
-import { TextDecoder } from 'util';
 import { execFileSync } from 'child_process';
 import { randomBytes } from 'crypto';
-import { unlinkSync, mkdtempSync, writeFileSync } from 'fs';
-import { tmpdir } from 'os';
+import { mkdtempSync, unlinkSync, writeFileSync } from 'fs';
 import { toEndWith, toIncludeSameMembers } from 'jest-extended';
+import { tmpdir } from 'os';
+import * as path from 'path';
+import { TextDecoder } from 'util';
 expect.extend({ toEndWith, toIncludeSameMembers });
 
 import * as Localization from '../src/lib/localizations';

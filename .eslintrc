@@ -22,12 +22,12 @@
     "prettier/prettier": "off",
     "@destinationstransfers/prefer-class-properties": "off",
     "node/no-unsupported-features/es-syntax": "off",
-    "node/no-unsupported-features/node-builtins": [
-      "error",
-      { "ignores": ["fs.promises"] }
-    ],
     "import/no-unresolved": "off",
     "dependencies/no-unresolved": "off",
+    "@typescript-eslint/no-unsafe-assignment": "warn",
+    "@typescript-eslint/no-unsafe-call": "warn",
+    "@typescript-eslint/no-unsafe-return": "warn",
+    "@typescript-eslint/no-unsafe-member-access": "warn",
     "@typescript-eslint/explicit-member-accessibility": [
       "error",
       {
@@ -36,7 +36,7 @@
     ],
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/camelcase": "off",
-    "@typescript-eslint/member-ordering": "error",
+    "@typescript-eslint/member-ordering": "warn",
     "@typescript-eslint/type-annotation-spacing": "error",
     "@typescript-eslint/no-extraneous-class": "error",
     "@typescript-eslint/no-non-null-assertion": "error",

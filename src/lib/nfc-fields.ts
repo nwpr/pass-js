@@ -12,6 +12,7 @@ import { NFCDictionary } from '../interfaces.js';
  */
 
 export class NFCField implements NFCDictionary {
+  [key: string]: unknown;
   message = '';
   encryptionPublicKey?: string;
 

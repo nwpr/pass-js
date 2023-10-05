@@ -1,10 +1,10 @@
-import { ApplePass, Options } from '../interfaces.js';
 import { BARCODES_FORMAT, STRUCTURE_FIELDS } from '../constants.js';
+import { ApplePass, Options } from '../interfaces.js';
 
-import { PassColor } from './pass-color.js';
+import { getGeoPoint } from './get-geo-point.js';
 import { PassImages } from './images.js';
 import { Localizations } from './localizations.js';
-import { getGeoPoint } from './get-geo-point.js';
+import { PassColor } from './pass-color.js';
 import { PassStructure } from './pass-structure.js';
 import { getW3CDateString, isValidW3CDateString } from './w3cdate.js';
 
@@ -39,40 +39,16 @@ export class PassBase extends PassStructure {
     this.localization = new Localizations(localizations);
   }
 
-  // Returns the pass.json object (not a string).
-  toJSON(): Partial<ApplePass> {
-    const res: Partial<ApplePass> = { formatVersion: 1 };
-    for (const [field, value] of Object.entries(this.fields)) {
-      res[field] = value instanceof Date ? getW3CDateString(value) : value;
-    }
-    return res;
-  }
-
   get passTypeIdentifier(): string | undefined {
     return this.fields.passTypeIdentifier;
-  }
-
-  set passTypeIdentifier(v: string | undefined) {
-    if (!v) delete this.fields.passTypeIdentifier;
-    else this.fields.passTypeIdentifier = v;
   }
 
   get teamIdentifier(): string | undefined {
     return this.fields.teamIdentifier;
   }
 
-  set teamIdentifier(v: string | undefined) {
-    if (!v) delete this.fields.teamIdentifier;
-    else this.fields.teamIdentifier = v;
-  }
-
   get serialNumber(): string | undefined {
     return this.fields.serialNumber;
-  }
-
-  set serialNumber(v: string | undefined) {
-    if (!v) delete this.fields.serialNumber;
-    else this.fields.serialNumber = v;
   }
 
   /**
@@ -84,11 +60,6 @@ export class PassBase extends PassStructure {
     return this.fields.sharingProhibited;
   }
 
-  set sharingProhibited(v) {
-    if (!v) delete this.fields.sharingProhibited;
-    else this.fields.sharingProhibited = true;
-  }
-
   /**
    *  Indicates that the pass is void—for example, a one time use coupon that has been redeemed.
    *
@@ -96,6 +67,26 @@ export class PassBase extends PassStructure {
    */
   get voided(): boolean {
     return !!this.fields.voided;
+  }
+
+  set passTypeIdentifier(v: string | undefined) {
+    if (!v) delete this.fields.passTypeIdentifier;
+    else this.fields.passTypeIdentifier = v;
+  }
+
+  set teamIdentifier(v: string | undefined) {
+    if (!v) delete this.fields.teamIdentifier;
+    else this.fields.teamIdentifier = v;
+  }
+
+  set serialNumber(v: string | undefined) {
+    if (!v) delete this.fields.serialNumber;
+    else this.fields.serialNumber = v;
+  }
+
+  set sharingProhibited(v) {
+    if (!v) delete this.fields.sharingProhibited;
+    else this.fields.sharingProhibited = true;
   }
 
   set voided(v: boolean) {
@@ -118,7 +109,7 @@ export class PassBase extends PassStructure {
       if (v instanceof Date) {
         if (!Number.isFinite(v.getTime()))
           throw new TypeError(
-            `Value for expirationDate must be a valid Date, received ${v}`,
+            `Value for expirationDate must be a valid Date, received ${v.toLocaleString()}`,
           );
         this.fields.expirationDate = v;
       } else if (typeof v === 'string') {
@@ -153,7 +144,7 @@ export class PassBase extends PassStructure {
       if (v instanceof Date) {
         if (!Number.isFinite(v.getTime()))
           throw new TypeError(
-            `Value for relevantDate must be a valid Date, received ${v}`,
+            `Value for relevantDate must be a valid Date, received ${v.toLocaleString()}`,
           );
         this.fields.relevantDate = v;
       } else if (typeof v === 'string') {
@@ -506,5 +497,14 @@ export class PassBase extends PassStructure {
     else
       for (const location of v)
         this.addLocation(location, location.relevantText);
+  }
+
+  // Returns the pass.json object (not a string).
+  toJSON(): Partial<ApplePass> {
+    const res: Partial<ApplePass> = { formatVersion: 1 };
+    for (const [field, value] of Object.entries(this.fields)) {
+      res[field] = value instanceof Date ? getW3CDateString(value) : value;
+    }
+    return res;
   }
 }
