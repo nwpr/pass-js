@@ -19,12 +19,17 @@ function is0to255(num: number): boolean {
  */
 function getRgb(colorString: string): [number, number, number] {
   // short paths
-  const string = colorString.trim();
-  if (string in colorNames) return colorNames[string];
-  if (/transparent/i.test(string)) return [0, 0, 0];
+  const str: string = colorString.trim();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  if (str in colorNames) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const col: [number, number, number] = colorNames[str as keyof typeof colorNames];
+    return col;
+  }
+  if (/transparent/i.test(str)) return [0, 0, 0];
 
   // we don't need to recheck values because they are enforced by regexes
-  let match = ABBR_RE.exec(string);
+  let match = ABBR_RE.exec(str);
   if (match) {
     return match.slice(1, 4).map(c => parseInt(c + c, 16)) as [
       number,
@@ -32,21 +37,21 @@ function getRgb(colorString: string): [number, number, number] {
       number,
     ];
   }
-  if ((match = HEX_RE.exec(string))) {
+  if ((match = HEX_RE.exec(str))) {
     return match.slice(1, 4).map(v => parseInt(v, 16)) as [
       number,
       number,
       number,
     ];
   }
-  if ((match = RGBA_RE.exec(string))) {
+  if ((match = RGBA_RE.exec(str))) {
     return match.slice(1, 4).map(c => parseInt(c, 10)) as [
       number,
       number,
       number,
     ];
   }
-  if ((match = PERCENT_RE.exec(string))) {
+  if ((match = PERCENT_RE.exec(str))) {
     return match.slice(1, 4).map(c => {
       const r = Math.round(parseFloat(c) * 2.55);
       if (is0to255(r)) return r;

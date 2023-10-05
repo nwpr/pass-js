@@ -1,7 +1,11 @@
 import fetch from 'node-fetch';
 
 const URL = process.env.URL || 'https://localhost:3000/api/sign-manifest';
-const HEADERS = process.env.HEADERS || {};
+const HEADERS: Record<string, string> = process.env.HEADERS?.split(';').reduce((accumulator, currentValue) => {
+  const [key, value]: string[] = currentValue.trim().split('=');
+  accumulator[key] = value;
+  return accumulator;
+}, {} as Record<string, string>) || {};
 HEADERS['Content-Type'] = 'application/json';
 
 /**
