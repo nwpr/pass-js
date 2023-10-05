@@ -1,6 +1,10 @@
 import { PassBase } from '../src/lib/base-pass';
 import { TOP_LEVEL_FIELDS } from '../src/constants';
-import 'jest-extended';
+import { toIncludeSameMembers } from 'jest-extended';
+
+expect.extend({
+  toIncludeSameMembers,
+});
 
 describe('PassBase', () => {
   it('should have all required pass properties', () => {

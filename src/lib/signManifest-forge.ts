@@ -1,5 +1,3 @@
-'use strict';
-
 import * as forge from 'node-forge';
 
 const APPLE_CA_CERTIFICATE = forge.pki.certificateFromPem(

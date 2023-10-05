@@ -1,5 +1,3 @@
-'use strict';
-
 import { randomBytes } from 'crypto';
 
 import { signManifest } from '../src/lib/signManifest-forge';

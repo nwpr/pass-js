@@ -1,22 +1,20 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2020,
+    "ecmaVersion": "latest",
     "project": "./tsconfig.all.json",
     "sourceType": "module"
   },
-  "plugins": ["@destinationstransfers", "@typescript-eslint"],
+  "plugins": ["@typescript-eslint"],
   "extends": [
-    "plugin:@destinationstransfers/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "prettier",
-    "prettier/@typescript-eslint"
+    "prettier"
   ],
   "env": {
     "node": true,
-    "browser": false
+    "browser": true
   },
   "rules": {
     "no-undef": "off", // conflicts with optional bindings

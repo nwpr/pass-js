@@ -1,5 +1,3 @@
-'use strict';
-
 import {
   getW3CDateString,
   isValidW3CDateString,

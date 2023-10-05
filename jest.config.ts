@@ -1,14 +1,16 @@
 import type { JestConfigWithTsJest } from 'ts-jest';
+//import { jsWithBabelESM as tsjPreset } from 'ts-jest/presets';
 
 const config: JestConfigWithTsJest = {
+  //preset: '@repobuddy/jest/presets/ts',
   collectCoverage: true,
   verbose: true,
   coverageReporters: ['text', 'json', 'cobertura', 'lcov'],
-  preset: 'ts-jest/presets/js-with-babel',
   testEnvironment: 'node',
   setupFilesAfterEnv: ['jest-extended'],
+  resolver: '@repobuddy/jest/resolver',
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
+    "(.+)\\.js": "$1"
   },
   transformIgnorePatterns: [
     "<rootDir>/node_modules"

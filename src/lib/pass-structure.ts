@@ -10,11 +10,11 @@ import {
   PassStyle,
   TransitType,
   PassCommonStructure,
-} from '../interfaces';
-import { PASS_STYLES, TRANSIT, STRUCTURE_FIELDS } from '../constants';
+} from '../interfaces.js';
+import { PASS_STYLES, TRANSIT, STRUCTURE_FIELDS } from '../constants.js';
 
-import { FieldsMap } from './fieldsMap';
-import { NFCField } from './nfc-fields';
+import { FieldsMap } from './fieldsMap.js';
+import { NFCField } from './nfc-fields.js';
 
 export class PassStructure {
   [key: string]: any;

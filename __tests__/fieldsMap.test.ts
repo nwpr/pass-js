@@ -1,5 +1,3 @@
-'use strict';
-
 import { FieldsMap } from '../src/lib/fieldsMap';
 import { getW3CDateString } from '../src/lib/w3cdate';
 

@@ -4,23 +4,23 @@
 
 import { toBuffer as createZip } from 'do-not-zip';
 
-import { getBufferHash } from './lib/getBufferHash';
-import { PassImages } from './lib/images';
-import { PassBase } from './lib/base-pass';
-import { ApplePass, Options } from './interfaces';
+import { getBufferHash } from './lib/getBufferHash.js';
+import { PassImages } from './lib/images.js';
+import { PassBase } from './lib/base-pass.js';
+import { ApplePass, Options } from './interfaces.js';
 
 // Create a new pass.
 //
 // template  - The template
 // fields    - Pass fields (description, serialNumber, logoText)
 export class Pass extends PassBase {
-  private readonly template: import('./template').Template;
+  private readonly template: import('./template.js').Template;
   // eslint-disable-next-line max-params
   constructor(
-    template: import('./template').Template,
+    template: import('./template.js').Template,
     fields: Partial<ApplePass> = {},
     images?: PassImages,
-    localization?: import('./lib/localizations').Localizations,
+    localization?: import('./lib/localizations.js').Localizations,
     options?: Options
   ) {
     super(fields, images, localization, options);
@@ -108,7 +108,7 @@ export class Pass extends PassBase {
 
     // Create signature
     if (this.template.signRemote) {
-      const signManifest = await import ('./lib/signManifest-remote');
+      const signManifest = await import ('./lib/signManifest-remote.js');
       const signature = await signManifest.signManifest(
         manifestJson
       );
@@ -119,7 +119,7 @@ export class Pass extends PassBase {
           `Set pass certificate and key in template before producing pass buffers`,
         );
       }
-      const signManifest = await import ('./lib/signManifest-forge');
+      const signManifest = await import ('./lib/signManifest-forge.js');
       const signature = signManifest.signManifest(
         this.template.certificate,
         this.template.key,

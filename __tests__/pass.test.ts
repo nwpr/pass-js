@@ -1,5 +1,3 @@
-'use strict';
-
 import { createHash, randomBytes } from 'crypto';
 import { unlinkSync, mkdtempSync, writeFileSync, readFileSync } from 'fs';
 import { tmpdir } from 'os';
@@ -156,7 +154,7 @@ describe('Pass', () => {
       path.resolve(__dirname, './resources/passes/Event.pass'),
     );
     expect(JSON.parse(JSON.stringify(t))).toEqual(
-      require('./resources/passes/Event.pass/pass.json'),
+      include('./resources/passes/Event.pass/pass.json'),
     );
   });
 

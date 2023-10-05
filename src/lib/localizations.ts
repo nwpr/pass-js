@@ -10,7 +10,7 @@ import { createInterface } from 'readline';
 import * as path from 'path';
 import { EOL } from 'os';
 
-import { normalizeLocale } from './normalize-locale';
+import { normalizeLocale } from './normalize-locale.js';
 
 /**
  * Just as in C, some characters must be prefixed with a backslash before you can include them in the string.

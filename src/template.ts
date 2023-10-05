@@ -2,8 +2,6 @@
  * Passbook are created from templates
  */
 
-'use strict';
-
 import * as http2 from 'http2';
 import { join } from 'path';
 import { promises as fs } from 'fs';
@@ -11,13 +9,13 @@ import { promises as fs } from 'fs';
 import * as forge from 'node-forge';
 import { unsigned as crc32 } from 'buffer-crc32';
 
-import { Pass } from './pass';
-import { PASS_STYLES } from './constants';
-import { PassStyle, ApplePass, Options } from './interfaces';
-import { PassBase } from './lib/base-pass';
-import { unzipBuffer } from './lib/yazul-promisified';
+import { Pass } from './pass.js';
+import { PASS_STYLES } from './constants.js';
+import { PassStyle, ApplePass, Options } from './interfaces.js';
+import { PassBase } from './lib/base-pass.js';
+import { unzipBuffer } from './lib/yazul-promisified.js';
 
-import stripJsonComments from 'strip-json-comments';
+import { default as stripJsonComments } from 'strip-json-comments';
 
 const {
   HTTP2_HEADER_METHOD,
@@ -41,8 +39,8 @@ export class Template extends PassBase {
   constructor(
     style?: PassStyle,
     fields: Partial<ApplePass> = {},
-    images?: import('./lib/images').PassImages,
-    localization?: import('./lib/localizations').Localizations,
+    images?: import('./lib/images.js').PassImages,
+    localization?: import('./lib/localizations.js').Localizations,
     options?: Options
   ) {
     super(fields, images, localization, options);
