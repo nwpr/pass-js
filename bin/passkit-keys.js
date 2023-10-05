@@ -26,22 +26,7 @@ if (!stats.isDirectory()) {
   process.exit(1);
 }
 
-// Extract the Apple Worldwide Developer Relations Certification Authority from
-// Keychain and store it as wwdr.pem in the keys directory.
-console.info(
-  `Extracting Apple WWDR certificate into directory ${keysDirectory}`,
-);
-const res = execFileSync(
-  'security',
-  [
-    'find-certificate',
-    '-p',
-    '-c',
-    'Apple Worldwide Developer Relations Certification Authority',
-  ],
-  { stdio: ['inherit', 'pipe', 'inherit'] },
-);
-fs.writeFileSync(path.join(keysDirectory, 'wwdr.pem'), res);
+//Removed extracting WWDR CA, because it's included in repo now
 
 // Convert all P12 files in the keys directory into PEM files.
 //
