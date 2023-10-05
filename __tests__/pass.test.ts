@@ -7,10 +7,11 @@ import * as path from 'path';
 import * as constants from '../src/constants';
 import { Template } from '../src/template';
 
-import { toBeValidDate } from 'jest-extended';
+import { toBeValidDate, toBeString } from 'jest-extended';
 
 expect.extend({
   toBeValidDate,
+  toBeString,
 });
 
 // Clone all the fields in object, except the named field, and return a new
