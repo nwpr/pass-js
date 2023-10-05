@@ -7,6 +7,12 @@ import * as path from 'path';
 import * as constants from '../src/constants';
 import { Template } from '../src/template';
 
+import { toBeValidDate } from 'jest-extended';
+
+expect.extend({
+  toBeValidDate,
+});
+
 // Clone all the fields in object, except the named field, and return a new
 // object.
 //
@@ -154,7 +160,7 @@ describe('Pass', () => {
       path.resolve(__dirname, './resources/passes/Event.pass'),
     );
     expect(JSON.parse(JSON.stringify(t))).toEqual(
-      include('./resources/passes/Event.pass/pass.json'),
+      readFileSync('./resources/passes/Event.pass/pass.json'),
     );
   });
 
