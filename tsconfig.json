@@ -3,7 +3,7 @@
   // for the documentation about the jsconfig.json format
   "compilerOptions": {
     // Keep allowJs here to allow use this config with tsc command line
-    "target": "ESNext",
+    "target": "ES2022",
     "lib": ["ES2022", "DOM"],
     /* Additional Checks */
     "noUnusedLocals": true,
@@ -15,7 +15,7 @@
     "allowSyntheticDefaultImports": true,
     /* Module Resolution Options */
     "moduleResolution": "Node",
-    "module": "NodeNext",
+    "module": "ES2022",
     "pretty": true,
     "declaration": true,
     "importHelpers": true,
