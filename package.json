@@ -2,7 +2,7 @@
   "name": "@nwpr/pass-js",
   "description": "Apple Wallet Pass generating and pushing updates from Node.js",
   "author": "walther IT <npmjs@mail.walther.eu.org>",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "type": "module",
   "homepage": "https://github.com/nwpr/pass-js",
   "license": "MIT",
